@@ -7,7 +7,7 @@ import io
 
 
 app = Flask(__name__)
-reader = PlateReader.load_from_file(r'C:\Studying\AAA\Term2\DS_beckend\src\plate_reader_model.pth')
+reader = PlateReader.load_from_file('/app/model_weights/plate_reader_model.pth')
 
 class PlateReaderClient:
     def __init__(self, host: str):
@@ -44,7 +44,7 @@ def read_plate():
         return {'Error': 'An error occurred while processing the request'}, 500  # Общая ошибка
     im = io.BytesIO(im)
     result = reader.read_text(im)
-    return {'result}': result}    
+    return {'result': result}    
 
 @app.route('/reader', methods=['POST'])
 def read_plate_many():
@@ -53,7 +53,7 @@ def read_plate_many():
     client = PlateReaderClient1(host='http://89.169.157.72:8080')
     for i in data:
         try:
-            im = client.get_image(f"{i}")
+            im = client.get_image(i)
         except requests.exceptions.HTTPError as e:
             return {'Error': 'Failed to retrieve image from server'}, 503  # Ошибка сервера
         except requests.exceptions.ConnectionError:
